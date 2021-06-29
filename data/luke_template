@@ -1,0 +1,2 @@
+{"code": {"body": "public Text(){\n\t\tsuper();\n\t}", "comment": "/**\n\t * Make an empty object\n\t */"}}
+{"code": {"body": "public Text(){String test="test";}", "comment": "/**\n\t * Make an poop!!! object\n\t */"}}
