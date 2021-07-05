@@ -27,8 +27,9 @@ public class JsonParser {
             }
         return sb.toString();
     }
-    public void parse_line(String line) throws ParseException {
-        System.out.println("Parsing:\n" + line);
+    public String parse_line(String line) throws ParseException {
+        //System.out.println("Parsing:\n" + line);
+        String saved_val = "";
         try {
             Object obj = new JSONParser().parse(line);
             JSONObject jo = (JSONObject) obj;
@@ -39,28 +40,37 @@ public class JsonParser {
             while (itr1.hasNext()) {
                 Map.Entry pair = itr1.next();
                 pair.getValue();
+                saved_val = pair.getValue().toString();
                 final_value = "{\"code\": \"" + unEscapeString(pair.getValue().toString()) + "\"}\n";
             }
-            System.out.println(final_value);
+            return final_value;
         }catch(Exception e){
-            System.out.println("EOF");
+            System.out.println("EOF:\n" + line);
+            return "";
         }
     }
-    public JsonParser(String file_path) throws IOException, ParseException {
+    public JsonParser(String file_path, String conversion_file_path) throws IOException, ParseException {
         this.file_path = file_path;
 
         /*try (Stream<String> stream = Files.lines(Paths.get(file_path), Charset.defaultCharset())) {
             stream.forEach(this::print);
         }catch(ParseException | IOException e){}*/
+        FileWriter fw = new FileWriter(conversion_file_path, true);
+        BufferedWriter bw = new BufferedWriter(fw);
 
         FileInputStream fstream = new FileInputStream(file_path);
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
         String strLine;
         while ((strLine = br.readLine()) != null)   {
             if(strLine == "") continue;
-            parse_line(strLine);
+            String parsed_line = parse_line(strLine);
+            bw.write(parsed_line);
+
         }
+        bw.close();
         fstream.close();
+
+
 
 
     }
@@ -69,8 +79,14 @@ public class JsonParser {
 
 
     public static void main(String... args) throws IOException, ParseException {
+        String root = "D:\\Projects\\gitscraper\\resources\\ResultingJSON\\Java\\";
+        String path_to_data = root + "comment_code_data1.json";
+        String path_to_output_data = root + "luke_to_dan_conversion.json";
 
-        JsonParser parser = new JsonParser("data/luke_template");
+
+        JsonParser parser = new JsonParser(path_to_data, path_to_output_data);
+       // JsonParser parser = new JsonParser("data/luke_template", "data/luke_template_parsed.json");
+
 
     }
 }

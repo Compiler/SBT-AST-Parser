@@ -19,10 +19,14 @@ public class JSONWriter {
     public static void main(String[] args) throws IOException {
         JSONWriter jw = new JSONWriter();
 
+        String root = "D:\\Projects\\gitscraper\\resources\\ResultingJSON\\Java\\";
+        String path_to_data = root + "luke_to_dan_conversion.json";
+        String path_to_output_data = root + "code_to_sbt.json";
         // Read the data file
-        File data = new File("data/sample.txt");
+        File data = new File(path_to_data);
         BufferedReader br = new BufferedReader(new FileReader(data));
-        BufferedWriter bw = new BufferedWriter(new FileWriter("data/data.json", true));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(path_to_output_data, true));
+
         bw.write("[");
         bw.newLine();
         jw.createJSON(br, bw);
